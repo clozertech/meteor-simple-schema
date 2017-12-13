@@ -1949,7 +1949,7 @@ Tinytest.add("SimpleSchema - Minimum Checks - Insert", function(test) {
   test.length(sc.invalidKeys(), 1);
   /* NUMBER */
   sc = validate(ss, {
-    minMaxNumberExclusive: 20 
+    minMaxNumberExclusive: 20
   });
   test.length(sc.invalidKeys(), 1);
   sc = validate(ss, {
@@ -3905,6 +3905,25 @@ Tinytest.add("SimpleSchema - Issue #123", function (test) {
   test.isFalse(isValid);
 });
 
+Tinytest.add("SimpleSchema - Issue #514", function (test) {
+   var schema1 = new SimpleSchema({
+     field1: {
+       type: String
+     }
+   });
+ 
+   var schema2 = new SimpleSchema({
+     field2: {
+       type: schema1
+     }
+   });
+ 
+   test.isNotUndefined(schema2.omit().schema('field2'));
+   test.isNotUndefined(schema2.omit().schema('field2.field1'));
+   test.isNotUndefined(schema2.pick('field2').schema('field2'));
+   test.isNotUndefined(schema2.pick('field2').schema('field2.field1'));
+ });
+ 
 Tinytest.add("SimpleSchema - Optional Custom", function(test) {
   var ctx = optCust.namedContext();
   // Ensure that custom validation runs even when the optional
